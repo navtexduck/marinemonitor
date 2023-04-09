@@ -47,6 +47,47 @@ const meta = {
 
   <Note />
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Send a GET request to the Radio Navigation Warnings page
+  var url = 'https://msi.admiralty.co.uk/RadioNavigationalWarnings';
+  $.get(url, function(response) {
+    // Parse the HTML content of the page using BeautifulSoup
+    var soup = $(response);
+
+    // Extract the NAVAREA I warnings from the parsed HTML content
+    var navarea_i_warnings = [];
+    soup.find('li').each(function() {
+      if ($(this).text().includes('NAVAREA I')) {
+        navarea_i_warnings.push($(this).text().trim());
+      }
+    });
+
+    // Format the extracted information into a structured format
+    var data = {'navarea_i_warnings': navarea_i_warnings};
+    var json_data = JSON.stringify(data);
+
+    // Send the formatted information to the https://navtexhub.netlify.app/ site using a POST request
+    var navtexhub_url = 'https://navtexhub.netlify.app/api/warnings';
+    $.ajax({
+      type: 'POST',
+      url: navtexhub_url,
+      data: json_data,
+      contentType: 'application/json',
+      success: function(response) {
+        // Display the navigational warning information on the front page
+        var navarea_i_warnings_html = '';
+        for (var i = 0; i < response.navarea_i_warnings.length; i++) {
+          navarea_i_warnings_html += '<li>' + response.navarea_i_warnings[i] + '</li>';
+        }
+        $('#navarea-i-warnings').html(navarea_i_warnings_html);
+      }
+    });
+  });
+});
+</script>
+  
   <!-- Features Widget *************** -->
 
   <Features
