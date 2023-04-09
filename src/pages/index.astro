@@ -47,11 +47,12 @@ const meta = {
 
   <Note />
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-  // Send a GET request to the Radio Navigation Warnings page
-  var url = 'https://msi.admiralty.co.uk/RadioNavigationalWarnings';
+  // Send a GET request to the Radio Navigation Warnings page using cors-anywhere
+  var cors_anywhere_url = 'https://cors-anywhere.herokuapp.com/';
+  var url = cors_anywhere_url + 'https://msi.admiralty.co.uk/RadioNavigationalWarnings';
   $.get(url, function(response) {
     // Parse the HTML content of the page using BeautifulSoup
     var soup = $(response);
